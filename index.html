@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset="utf-8">
+    
+    <title>数据安全技术研究</title>
+    
+    
+        <meta name="keywords" content="数据安全技术研究" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta property="og:type" content="website">
+<meta property="og:title" content="数据安全技术研究">
+<meta property="og:url" content="https://blog.yindex.org/index.html">
+<meta property="og:site_name" content="数据安全技术研究">
+<meta property="og:locale" content="en_US">
+<meta property="article:author" content="yindex">
+<meta name="twitter:card" content="summary">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="数据安全技术研究" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/open-sans/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    
+<script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">数据安全技术研究</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title"><span>recent</span></h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-title"><a href="/2020/02/15/%E5%88%86%E5%B8%83%E5%BC%8F%E5%BF%AB%E7%85%A7%E7%AE%97%E6%B3%95%20Chandy-Lamport/" class="title">分布式快照算法 Chandy-Lamport</a></p>
+                            <p class="item-date"><time datetime="2020-02-15T16:12:31.000Z" itemprop="datePublished">2020-02-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-title"><a href="/2019/07/10/go-lvs-toa-ipv4/" class="title">LVS后端GO-Web获取用户IP</a></p>
+                            <p class="item-date"><time datetime="2019-07-10T16:12:31.000Z" itemprop="datePublished">2019-07-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-title"><a href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-inFlightPqueue%E5%92%8CPriorityQueue/" class="title">NSQ代码阅读与分析之inFlightPqueue与inFlightPqueue</a></p>
+                            <p class="item-date"><time datetime="2019-04-20T00:00:00.000Z" itemprop="datePublished">2019-04-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-title"><a href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-TOPIC/" class="title">NSQ代码阅读与分析之TOPIC</a></p>
+                            <p class="item-date"><time datetime="2019-04-20T00:00:00.000Z" itemprop="datePublished">2019-04-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-title"><a href="/2019/04/15/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-Channel/" class="title">NSQ代码阅读与分析之Channel</a></p>
+                            <p class="item-date"><time datetime="2019-04-15T00:00:00.000Z" itemprop="datePublished">2019-04-15</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title"><span>tag cloud</span></h3>
+        <div class="widget">
+            <a href="/tags/Channel/" style="font-size: 10px;">Channel</a> <a href="/tags/arm/" style="font-size: 13.33px;">arm</a> <a href="/tags/cnn/" style="font-size: 10px;">cnn</a> <a href="/tags/flink/" style="font-size: 10px;">flink</a> <a href="/tags/go/" style="font-size: 10px;">go</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/lua/" style="font-size: 10px;">lua</a> <a href="/tags/lvs/" style="font-size: 10px;">lvs</a> <a href="/tags/mnist/" style="font-size: 10px;">mnist</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/nsq/" style="font-size: 20px;">nsq</a> <a href="/tags/nsqlookup/" style="font-size: 10px;">nsqlookup</a> <a href="/tags/streaming/" style="font-size: 10px;">streaming</a> <a href="/tags/tcp6/" style="font-size: 10px;">tcp6</a> <a href="/tags/topic/" style="font-size: 10px;">topic</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 16.67px;">中间件</a> <a href="/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" style="font-size: 13.33px;">交叉编译</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%BF%AB%E7%85%A7/" style="font-size: 10px;">分布式快照</a> <a href="/tags/%E5%BB%B6%E8%BF%9F%E6%8A%95%E9%80%92/" style="font-size: 10px;">延迟投递</a> <a href="/tags/%E6%B5%B7%E6%80%9D/" style="font-size: 13.33px;">海思</a> <a href="/tags/%E6%B6%88%E6%81%AF%E6%8A%95%E9%80%92/" style="font-size: 10px;">消息投递</a> <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="font-size: 20px;">消息队列</a> <a href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">装饰器模式</a>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title"><span>archives</span></h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap" id='categories'>
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id='allExpand' href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree" > 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            flink
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2020/02/15/%E5%88%86%E5%B8%83%E5%BC%8F%E5%BF%AB%E7%85%A7%E7%AE%97%E6%B3%95%20Chandy-Lamport/">分布式快照算法 Chandy-Lamport</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            hadoop
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2019/04/01/2019-04-01-Hadoop%20Streaming%5B%E8%AF%91%5D/">Hadoop Streaming手册[译]</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            lua
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2018/12/28/2018-12-28-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%20lua%20for%20hisi-arm-linux/">交叉编译 lua for hisi-arm-linux</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            nginx
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2018/12/28/2018-12-31-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91nginx-1.14.2%20for%20hisi-arm-linux/">交叉编译nginx-1.14.2 for hisi-arm-linux</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            中间件
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2019/03/10/2019-03-10-NSQ%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-nsqlookupd%E7%BB%84%E4%BB%B6/">NSQ源码阅读-nsqlookupd组件</a></li>  <li class="file"><a href="/2019/04/14/2019-04-20-NSQ%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-%E5%BB%B6%E8%BF%9F%E6%B6%88%E6%81%AF/">NSQ延迟消息投递</a></li>  <li class="file"><a href="/2019/04/15/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-Channel/">NSQ代码阅读与分析之Channel</a></li>  <li class="file"><a href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-inFlightPqueue%E5%92%8CPriorityQueue/">NSQ代码阅读与分析之inFlightPqueue与inFlightPqueue</a></li>  <li class="file"><a href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-TOPIC/">NSQ代码阅读与分析之TOPIC</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            后端开发
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2019/07/10/go-lvs-toa-ipv4/">LVS后端GO-Web获取用户IP</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            深度学习
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2017/07/05/%E5%9F%BA%E4%BA%8Ecnn%E8%BF%9B%E8%A1%8Cmnist%E6%89%8B%E5%86%99%E8%AF%86%E5%88%AB/">基于CNN的MNIST手写识别尝试</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title"><span>tags</span></h3>
+        <div class="widget">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Channel/" rel="tag">Channel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/arm/" rel="tag">arm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cnn/" rel="tag">cnn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flink/" rel="tag">flink</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/" rel="tag">go</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lua/" rel="tag">lua</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lvs/" rel="tag">lvs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mnist/" rel="tag">mnist</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nsq/" rel="tag">nsq</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nsqlookup/" rel="tag">nsqlookup</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/streaming/" rel="tag">streaming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp6/" rel="tag">tcp6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/topic/" rel="tag">topic</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" rel="tag">交叉编译</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%BF%AB%E7%85%A7/" rel="tag">分布式快照</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%B6%E8%BF%9F%E6%8A%95%E9%80%92/" rel="tag">延迟投递</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E6%80%9D/" rel="tag">海思</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E6%81%AF%E6%8A%95%E9%80%92/" rel="tag">消息投递</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag">消息队列</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/" rel="tag">装饰器模式</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title"><span>links</span></h3>
+        <div class="widget">
+            <ul>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main">
+        <article id="post-分布式快照算法 Chandy-Lamport" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/flink/">flink</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/flink/" rel="tag">flink</a>, <a class="tag-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%BF%AB%E7%85%A7/" rel="tag">分布式快照</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2020/02/15/%E5%88%86%E5%B8%83%E5%BC%8F%E5%BF%AB%E7%85%A7%E7%AE%97%E6%B3%95%20Chandy-Lamport/">
+            <time datetime="2020-02-15T16:12:31.000Z" itemprop="datePublished">2020-02-15</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/raw/master/source/_posts/分布式快照算法 Chandy-Lamport.md' target="_blank" rel="noopener"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/edit/master/source/_posts/分布式快照算法 Chandy-Lamport.md' target="_blank" rel="noopener"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/commits/master/source/_posts/分布式快照算法 Chandy-Lamport.md' target="_blank" rel="noopener"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2020/02/15/%E5%88%86%E5%B8%83%E5%BC%8F%E5%BF%AB%E7%85%A7%E7%AE%97%E6%B3%95%20Chandy-Lamport/">分布式快照算法 Chandy-Lamport</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+            
+        
+        
+            
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-go-lvs-toa-ipv4" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/">后端开发</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/go/" rel="tag">go</a>, <a class="tag-link" href="/tags/lvs/" rel="tag">lvs</a>, <a class="tag-link" href="/tags/tcp6/" rel="tag">tcp6</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2019/07/10/go-lvs-toa-ipv4/">
+            <time datetime="2019-07-10T16:12:31.000Z" itemprop="datePublished">2019-07-10</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/raw/master/source/_posts/go-lvs-toa-ipv4.md' target="_blank" rel="noopener"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/edit/master/source/_posts/go-lvs-toa-ipv4.md' target="_blank" rel="noopener"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/commits/master/source/_posts/go-lvs-toa-ipv4.md' target="_blank" rel="noopener"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2019/07/10/go-lvs-toa-ipv4/">LVS后端GO-Web获取用户IP</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>最近写了个对外的ti接口,测试时发现获取到的用户ip都是lvs的ip. 咨询hulk同事LVS是FULLNAT模式,宿主机器需要安装toa.然而安装完toa后依旧没有解决问题.z在宿主机器上查看go-web监听和链接情况:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -pant | grep ti</span><br></pre></td></tr></table></figure>
+<p>发现go gin框架默认以tcp6监听服务，通过查询资料得知toa仅支持tcp4, 那么就需要修改下源代码让服务监听tcp4.</p>
+<h2 id="查看gin源码"><a href="#查看gin源码" class="headerlink" title="查看gin源码"></a>查看gin源码</h2><p>想看看gin是如何进行tcp监听的，查看gin.go代码289行发现，gin框架是使用go原生http.ListenAndServe启动的web服务.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(engine *Engine)</span> <span class="title">Run</span><span class="params">(addr ...<span class="keyword">string</span>)</span> <span class="params">(err error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; debugPrintError(err) &#125;()</span><br><span class="line"></span><br><span class="line">	address := resolveAddress(addr)</span><br><span class="line">	debugPrint(<span class="string">"Listening and serving HTTP on %s\n"</span>, address)</span><br><span class="line">	err = http.ListenAndServe(address, engine)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2019/07/10/go-lvs-toa-ipv4/#more">Read More</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-2019-04-20-NSQ-代码阅读与分析-inFlightPqueue和PriorityQueue" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/golang/" rel="tag">golang</a>, <a class="tag-link" href="/tags/nsq/" rel="tag">nsq</a>, <a class="tag-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>, <a class="tag-link" href="/tags/%E6%B6%88%E6%81%AF%E6%8A%95%E9%80%92/" rel="tag">消息投递</a>, <a class="tag-link" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag">消息队列</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-inFlightPqueue%E5%92%8CPriorityQueue/">
+            <time datetime="2019-04-20T00:00:00.000Z" itemprop="datePublished">2019-04-20</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/raw/master/source/_posts/2019-04-20-NSQ-代码阅读与分析-inFlightPqueue和PriorityQueue.md' target="_blank" rel="noopener"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/edit/master/source/_posts/2019-04-20-NSQ-代码阅读与分析-inFlightPqueue和PriorityQueue.md' target="_blank" rel="noopener"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/commits/master/source/_posts/2019-04-20-NSQ-代码阅读与分析-inFlightPqueue和PriorityQueue.md' target="_blank" rel="noopener"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-inFlightPqueue%E5%92%8CPriorityQueue/">NSQ代码阅读与分析之inFlightPqueue与inFlightPqueue</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><h1 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h1><ul>
+<li><a href="https://nsq.io/clients/tcp_protocol_spec.html" target="_blank" rel="noopener">https://nsq.io/clients/tcp_protocol_spec.html</a></li>
+<li><a href="https://github.com/nsqio/nsq" target="_blank" rel="noopener">https://github.com/nsqio/nsq</a></li>
+<li><a href="https://blog.csdn.net/skh2015java/article/details/83419493" target="_blank" rel="noopener">https://blog.csdn.net/skh2015java/article/details/83419493</a></li>
+<li><a href="https://blog.csdn.net/skh2015java/article/details/83416045" target="_blank" rel="noopener">https://blog.csdn.net/skh2015java/article/details/83416045</a></li>
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-inFlightPqueue%E5%92%8CPriorityQueue/#more">Read More</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-2019-04-20-NSQ-代码阅读与分析-TOPIC" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/golang/" rel="tag">golang</a>, <a class="tag-link" href="/tags/nsq/" rel="tag">nsq</a>, <a class="tag-link" href="/tags/topic/" rel="tag">topic</a>, <a class="tag-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>, <a class="tag-link" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag">消息队列</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-TOPIC/">
+            <time datetime="2019-04-20T00:00:00.000Z" itemprop="datePublished">2019-04-20</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/raw/master/source/_posts/2019-04-20-NSQ-代码阅读与分析-TOPIC.md' target="_blank" rel="noopener"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/edit/master/source/_posts/2019-04-20-NSQ-代码阅读与分析-TOPIC.md' target="_blank" rel="noopener"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/commits/master/source/_posts/2019-04-20-NSQ-代码阅读与分析-TOPIC.md' target="_blank" rel="noopener"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-TOPIC/">NSQ代码阅读与分析之TOPIC</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><!-- toc -->
+
+<p>NSQ的Topic类型在<code>nsq/nsqd/topic.go中</code>定义，该文件中实现了Topic工厂方法，Topc状态管理、Channel(此channel非彼channel，该channel是nsq消费者通道)管理、消息写入、消息推送、落盘等.</p>
+<h2 id="Topic类型定义"><a href="#Topic类型定义" class="headerlink" title="Topic类型定义"></a>Topic类型定义</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Topic <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">// 64bit atomic vars need to be first for proper alignment on 32bit platforms</span></span><br><span class="line">	messageCount <span class="keyword">uint64</span></span><br><span class="line">    <span class="comment">//消息总大小</span></span><br><span class="line">	messageBytes <span class="keyword">uint64</span></span><br><span class="line">	sync.RWMutex</span><br><span class="line">    <span class="comment">//topic 名称</span></span><br><span class="line">	name              <span class="keyword">string</span></span><br><span class="line">    <span class="comment">//消费者通道映射表</span></span><br><span class="line">	channelMap        <span class="keyword">map</span>[<span class="keyword">string</span>]*Channel</span><br><span class="line">    <span class="comment">//后端落盘队列: 临时topic设置了伪落盘</span></span><br><span class="line">	backend           BackendQueue</span><br><span class="line">    <span class="comment">//消息内存队列（chan)</span></span><br><span class="line">	memoryMsgChan     <span class="keyword">chan</span> *Message</span><br><span class="line">	startChan         <span class="keyword">chan</span> <span class="keyword">int</span></span><br><span class="line">	exitChan          <span class="keyword">chan</span> <span class="keyword">int</span></span><br><span class="line">	channelUpdateChan <span class="keyword">chan</span> <span class="keyword">int</span></span><br><span class="line">	waitGroup         util.WaitGroupWrapper</span><br><span class="line">	exitFlag          <span class="keyword">int32</span></span><br><span class="line">	idFactory         *guidFactory</span><br><span class="line">	ephemeral      <span class="keyword">bool</span></span><br><span class="line">	deleteCallback <span class="function"><span class="keyword">func</span><span class="params">(*Topic)</span></span></span><br><span class="line">	deleter        sync.Once</span><br><span class="line">	paused    <span class="keyword">int32</span></span><br><span class="line">	pauseChan <span class="keyword">chan</span> <span class="keyword">int</span></span><br><span class="line">	<span class="comment">// 节点上下文,包含节点各种信息</span></span><br><span class="line">	ctx *context</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-TOPIC/#more">Read More</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-2019-04-20-NSQ-代码阅读与分析-Channel" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Channel/" rel="tag">Channel</a>, <a class="tag-link" href="/tags/golang/" rel="tag">golang</a>, <a class="tag-link" href="/tags/nsq/" rel="tag">nsq</a>, <a class="tag-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>, <a class="tag-link" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag">消息队列</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2019/04/15/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-Channel/">
+            <time datetime="2019-04-15T00:00:00.000Z" itemprop="datePublished">2019-04-15</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/raw/master/source/_posts/2019-04-20-NSQ-代码阅读与分析-Channel.md' target="_blank" rel="noopener"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/edit/master/source/_posts/2019-04-20-NSQ-代码阅读与分析-Channel.md' target="_blank" rel="noopener"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/commits/master/source/_posts/2019-04-20-NSQ-代码阅读与分析-Channel.md' target="_blank" rel="noopener"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2019/04/15/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-Channel/">NSQ代码阅读与分析之Channel</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><!-- toc -->
+
+<p>此channel非彼channel,只是跟golang的channel同名而已,它是NSQ消费者订阅特定Topic的一种抽象.nsqd抽到生产者push的message后,会遍历当前topic下所有消费者channel并深度拷贝message下发到所有消费这channel中.并且同意个消费通道只会被投递一次.其中nsqd的deferred message在此实现.下图是nsq官网的一个消息流向图.</p>
+<p><img src="/img/nsq.gif" alt="nsq.gif"></p>
+<h2 id="channel创建于初始化"><a href="#channel创建于初始化" class="headerlink" title="channel创建于初始化"></a>channel创建于初始化</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewChannel</span><span class="params">(topicName <span class="keyword">string</span>, channelName <span class="keyword">string</span>, ctx *context,</span></span></span><br><span class="line"><span class="function"><span class="params">	deleteCallback <span class="keyword">func</span>(*Channel)</span>) *<span class="title">Channel</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	c := &amp;Channel&#123;</span><br><span class="line">		topicName:      topicName,</span><br><span class="line">		name:           channelName,</span><br><span class="line">		memoryMsgChan:  <span class="built_in">make</span>(<span class="keyword">chan</span> *Message, ctx.nsqd.getOpts().MemQueueSize),</span><br><span class="line">		clients:        <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">int64</span>]Consumer),</span><br><span class="line">		deleteCallback: deleteCallback,</span><br><span class="line">		ctx:            ctx,</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(ctx.nsqd.getOpts().E2EProcessingLatencyPercentiles) &gt; <span class="number">0</span> &#123;</span><br><span class="line">		c.e2eProcessingLatencyStream = quantile.New(</span><br><span class="line">			ctx.nsqd.getOpts().E2EProcessingLatencyWindowTime,</span><br><span class="line">			ctx.nsqd.getOpts().E2EProcessingLatencyPercentiles,</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	c.initPQ()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> strings.HasSuffix(channelName, <span class="string">"#ephemeral"</span>) &#123;</span><br><span class="line">		c.ephemeral = <span class="literal">true</span></span><br><span class="line">		c.backend = newDummyBackendQueue()</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		dqLogf := <span class="function"><span class="keyword">func</span><span class="params">(level diskqueue.LogLevel, f <span class="keyword">string</span>, args ...<span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">			opts := ctx.nsqd.getOpts()</span><br><span class="line">			lg.Logf(opts.Logger, opts.LogLevel, lg.LogLevel(level), f, args...)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// backend names, for uniqueness, automatically include the topic...</span></span><br><span class="line">		backendName := getBackendName(topicName, channelName)</span><br><span class="line">		c.backend = diskqueue.New(</span><br><span class="line">			backendName,</span><br><span class="line">			ctx.nsqd.getOpts().DataPath,</span><br><span class="line">			ctx.nsqd.getOpts().MaxBytesPerFile,</span><br><span class="line">			<span class="keyword">int32</span>(minValidMsgLength),</span><br><span class="line">			<span class="keyword">int32</span>(ctx.nsqd.getOpts().MaxMsgSize)+minValidMsgLength,</span><br><span class="line">			ctx.nsqd.getOpts().SyncEvery,</span><br><span class="line">			ctx.nsqd.getOpts().SyncTimeout,</span><br><span class="line">			dqLogf,</span><br><span class="line">		)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	c.ctx.nsqd.Notify(c)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> c</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2019/04/15/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-Channel/#more">Read More</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-2019-04-20-NSQ源码阅读与分析-延迟消息" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/golang/" rel="tag">golang</a>, <a class="tag-link" href="/tags/nsq/" rel="tag">nsq</a>, <a class="tag-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a>, <a class="tag-link" href="/tags/%E5%BB%B6%E8%BF%9F%E6%8A%95%E9%80%92/" rel="tag">延迟投递</a>, <a class="tag-link" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag">消息队列</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2019/04/14/2019-04-20-NSQ%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-%E5%BB%B6%E8%BF%9F%E6%B6%88%E6%81%AF/">
+            <time datetime="2019-04-14T00:00:00.000Z" itemprop="datePublished">2019-04-14</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/raw/master/source/_posts/2019-04-20-NSQ源码阅读与分析-延迟消息.md' target="_blank" rel="noopener"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/edit/master/source/_posts/2019-04-20-NSQ源码阅读与分析-延迟消息.md' target="_blank" rel="noopener"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/commits/master/source/_posts/2019-04-20-NSQ源码阅读与分析-延迟消息.md' target="_blank" rel="noopener"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2019/04/14/2019-04-20-NSQ%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-%E5%BB%B6%E8%BF%9F%E6%B6%88%E6%81%AF/">NSQ延迟消息投递</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><!-- toc -->
+
+<h1 id="Deferred-Message"><a href="#Deferred-Message" class="headerlink" title="Deferred Message"></a>Deferred Message</h1><p>NSQ support deferred message, We can publish a deferred message to a topic by DPUB.NSQ目前在TCP客户端呢支持独立接口延迟消息,http PUB接口作为参数选项支持.并且nsq版本需要大于等于0.3.6.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">DPUB &lt;topic_name&gt; &lt;defer_time&gt;\n</span><br><span class="line">[ 4-byte size <span class="keyword">in</span> bytes ][ N-byte binary data ]</span><br><span class="line"></span><br><span class="line">&lt;topic_name&gt; - a valid string (optionally having <span class="comment">#ephemeral suffix)</span></span><br><span class="line">&lt;defer_time&gt; - a string representation of <span class="built_in">integer</span> D <span class="built_in">which</span> defines the time <span class="keyword">for</span> how long to defer <span class="built_in">where</span> 0 &lt;= D &lt; max-requeue-timeout</span><br></pre></td></tr></table></figure>
+
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2019/04/14/2019-04-20-NSQ%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-%E5%BB%B6%E8%BF%9F%E6%B6%88%E6%81%AF/#more">Read More</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-2019-04-01-Hadoop Streaming[译]" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/hadoop/">hadoop</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/hadoop/" rel="tag">hadoop</a>, <a class="tag-link" href="/tags/streaming/" rel="tag">streaming</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2019/04/01/2019-04-01-Hadoop%20Streaming%5B%E8%AF%91%5D/">
+            <time datetime="2019-04-01T00:00:00.000Z" itemprop="datePublished">2019-04-01</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/raw/master/source/_posts/2019-04-01-Hadoop Streaming[译].md' target="_blank" rel="noopener"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/edit/master/source/_posts/2019-04-01-Hadoop Streaming[译].md' target="_blank" rel="noopener"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/commits/master/source/_posts/2019-04-01-Hadoop Streaming[译].md' target="_blank" rel="noopener"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2019/04/01/2019-04-01-Hadoop%20Streaming%5B%E8%AF%91%5D/">Hadoop Streaming手册[译]</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><!-- toc -->
+
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>hadoop streaming是hadoop发行版附带的功能. 该功能让我们可以使用任何程序或脚本作为mapper和reducer 来创建Map/Reduce作业.例如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hadoop jar hadoop-streaming-2.9.2.jar \</span><br><span class="line">	-input inputDirs \</span><br><span class="line">	-output outputDirs \</span><br><span class="line">	-mapper /bin/cat \</span><br><span class="line">	-reducer /usr/bin/wc</span><br></pre></td></tr></table></figure>
+
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2019/04/01/2019-04-01-Hadoop%20Streaming%5B%E8%AF%91%5D/#more">Read More</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-2019-03-10-NSQ源码阅读-nsqlookupd组件" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/golang/" rel="tag">golang</a>, <a class="tag-link" href="/tags/http/" rel="tag">http</a>, <a class="tag-link" href="/tags/nsq/" rel="tag">nsq</a>, <a class="tag-link" href="/tags/nsqlookup/" rel="tag">nsqlookup</a>, <a class="tag-link" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag">消息队列</a>, <a class="tag-link" href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/" rel="tag">装饰器模式</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2019/03/10/2019-03-10-NSQ%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-nsqlookupd%E7%BB%84%E4%BB%B6/">
+            <time datetime="2019-03-10T00:00:00.000Z" itemprop="datePublished">2019-03-10</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/raw/master/source/_posts/2019-03-10-NSQ源码阅读-nsqlookupd组件.md' target="_blank" rel="noopener"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/edit/master/source/_posts/2019-03-10-NSQ源码阅读-nsqlookupd组件.md' target="_blank" rel="noopener"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/commits/master/source/_posts/2019-03-10-NSQ源码阅读-nsqlookupd组件.md' target="_blank" rel="noopener"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2019/03/10/2019-03-10-NSQ%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-nsqlookupd%E7%BB%84%E4%BB%B6/">NSQ源码阅读-nsqlookupd组件</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><!-- toc -->
+<blockquote>
+<p>NSQ包含三大组件nsqd、nsqlookup、nsqadmin. nsqlookupd 是守护进程负责管理拓扑信息,客户端通过查询 nsqlookupd 来发现指定topic的生产者，并且 nsqd 节点广播topic和channel信息.它包含两个接口：TCP 接口:处理nsqd广播。HTTP 接口:客户端用它来发现和管理服务。</p>
+</blockquote>
+<h2 id="一、NSQLookupd类型"><a href="#一、NSQLookupd类型" class="headerlink" title="一、NSQLookupd类型"></a>一、NSQLookupd类型</h2><p>nsqlookupd.go为nsqlookup组件的入口文件,它主要包含一个NSQLookupd结构类型和该类型的工厂方法func New(*Options)*NSQLookupd.</p>
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2019/03/10/2019-03-10-NSQ%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-nsqlookupd%E7%BB%84%E4%BB%B6/#more">Read More</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-2018-12-31-交叉编译nginx-1.14.2 for hisi-arm-linux" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/nginx/">nginx</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/arm/" rel="tag">arm</a>, <a class="tag-link" href="/tags/nginx/" rel="tag">nginx</a>, <a class="tag-link" href="/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" rel="tag">交叉编译</a>, <a class="tag-link" href="/tags/%E6%B5%B7%E6%80%9D/" rel="tag">海思</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/12/28/2018-12-31-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91nginx-1.14.2%20for%20hisi-arm-linux/">
+            <time datetime="2018-12-28T00:32:24.000Z" itemprop="datePublished">2018-12-28</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/raw/master/source/_posts/2018-12-31-交叉编译nginx-1.14.2 for hisi-arm-linux.md' target="_blank" rel="noopener"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/edit/master/source/_posts/2018-12-31-交叉编译nginx-1.14.2 for hisi-arm-linux.md' target="_blank" rel="noopener"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/commits/master/source/_posts/2018-12-31-交叉编译nginx-1.14.2 for hisi-arm-linux.md' target="_blank" rel="noopener"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2018/12/28/2018-12-31-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91nginx-1.14.2%20for%20hisi-arm-linux/">交叉编译nginx-1.14.2 for hisi-arm-linux</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><!-- toc -->
+<blockquote>
+<p>根据别人意见工程架构采用nginx+cgi的架构，当然工程中其他部分也对nginx有所依赖。所以需要把nginx移植到到hisi-arm-linux上。由于nginx自身不具备交叉编译支持，所以需要修改一些配置。</p>
+</blockquote>
+<h2 id="二、交叉编译nginx"><a href="#二、交叉编译nginx" class="headerlink" title="二、交叉编译nginx"></a>二、交叉编译nginx</h2><p>交叉编译环境: ubuntu 18.10 依赖： nginx-1.14.2 pcre-8.42， 仅编译必备选项，其他依赖不进行交叉编译支持（比如ssl） 工具链：aarch64-himix100-linux-gcc configure 配置 </p>
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2018/12/28/2018-12-31-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91nginx-1.14.2%20for%20hisi-arm-linux/#more">Read More</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <article id="post-2018-12-28-交叉编译 lua for hisi-arm-linux" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/lua/">lua</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/arm/" rel="tag">arm</a>, <a class="tag-link" href="/tags/lua/" rel="tag">lua</a>, <a class="tag-link" href="/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" rel="tag">交叉编译</a>, <a class="tag-link" href="/tags/%E6%B5%B7%E6%80%9D/" rel="tag">海思</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/12/28/2018-12-28-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%20lua%20for%20hisi-arm-linux/">
+            <time datetime="2018-12-28T00:32:24.000Z" itemprop="datePublished">2018-12-28</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/raw/master/source/_posts/2018-12-28-交叉编译 lua for hisi-arm-linux.md' target="_blank" rel="noopener"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/edit/master/source/_posts/2018-12-28-交叉编译 lua for hisi-arm-linux.md' target="_blank" rel="noopener"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/commits/master/source/_posts/2018-12-28-交叉编译 lua for hisi-arm-linux.md' target="_blank" rel="noopener"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2018/12/28/2018-12-28-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%20lua%20for%20hisi-arm-linux/">交叉编译 lua for hisi-arm-linux</a>
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+                
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><!-- toc -->
+
+<blockquote>
+<p>最近被借到其他部门做开发, 由于不可抗力因素，项目宿主机器由x64 Ubuntu Server转移到某arm 裸kernel上。为降低机器负载、统一技术栈和其他不可抗力因素后端调度器用C++11重构原有JAVA工程，由C++ with lua实现决策支持引擎。</p>
+</blockquote>
+<p>
+                
+            
+        
+        
+            </div>   
+            <div class="article-more-link">
+                <a href="/2018/12/28/2018-12-28-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%20lua%20for%20hisi-arm-linux/#more">Read More</a>
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+
+
+
+
+    
+        <nav id="page-nav">
+        <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &amp;raquo;</a>
+        </nav>
+    
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            yindex &copy; 2020 
+            <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" /></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" target="_blank" rel="noopener">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>

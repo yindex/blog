@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <meta charset="utf-8">
+    
+    <title>NSQ源码阅读-nsqlookupd组件 | 数据安全技术研究</title>
+    
+    
+        <meta name="keywords" content="golang,nsq,消息队列,nsqlookup,http,装饰器模式" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="NSQ包含三大组件nsqd、nsqlookup、nsqadmin. nsqlookupd 是守护进程负责管理拓扑信息,客户端通过查询 nsqlookupd 来发现指定topic的生产者，并且 nsqd 节点广播topic和channel信息.它包含两个接口：TCP 接口:处理nsqd广播。HTTP 接口:客户端用它来发现和管理服务。  一、NSQLookupd类型nsqlookupd.go为n">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NSQ源码阅读-nsqlookupd组件">
+<meta property="og:url" content="https://blog.yindex.org/2019/03/10/2019-03-10-NSQ%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-nsqlookupd%E7%BB%84%E4%BB%B6/index.html">
+<meta property="og:site_name" content="数据安全技术研究">
+<meta property="og:description" content="NSQ包含三大组件nsqd、nsqlookup、nsqadmin. nsqlookupd 是守护进程负责管理拓扑信息,客户端通过查询 nsqlookupd 来发现指定topic的生产者，并且 nsqd 节点广播topic和channel信息.它包含两个接口：TCP 接口:处理nsqd广播。HTTP 接口:客户端用它来发现和管理服务。  一、NSQLookupd类型nsqlookupd.go为n">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blog.yindex.org/img/nslookupd_type.png">
+<meta property="article:published_time" content="2019-03-10T00:00:00.000Z">
+<meta property="article:modified_time" content="2020-02-15T06:48:07.056Z">
+<meta property="article:author" content="yindex">
+<meta property="article:tag" content="golang">
+<meta property="article:tag" content="nsq">
+<meta property="article:tag" content="消息队列">
+<meta property="article:tag" content="nsqlookup">
+<meta property="article:tag" content="http">
+<meta property="article:tag" content="装饰器模式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blog.yindex.org/img/nslookupd_type.png">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="数据安全技术研究" type="application/atom+xml" />
+    
+
+    
+        <link rel="icon" href="/favicon.ico" />
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/open-sans/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+
+    
+<script src="/libs/jquery/plugins/cookie/1.4.1/jquery.cookie.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+    
+    
+
+
+    
+        <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">数据安全技术研究</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/">首页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+
+<script src="/js/insight.js"></script>
+
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/">首页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+            
+                <aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title"><span>recent</span></h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-title"><a href="/2020/02/15/%E5%88%86%E5%B8%83%E5%BC%8F%E5%BF%AB%E7%85%A7%E7%AE%97%E6%B3%95%20Chandy-Lamport/" class="title">分布式快照算法 Chandy-Lamport</a></p>
+                            <p class="item-date"><time datetime="2020-02-15T16:12:31.000Z" itemprop="datePublished">2020-02-15</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-title"><a href="/2019/07/10/go-lvs-toa-ipv4/" class="title">LVS后端GO-Web获取用户IP</a></p>
+                            <p class="item-date"><time datetime="2019-07-10T16:12:31.000Z" itemprop="datePublished">2019-07-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-title"><a href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-inFlightPqueue%E5%92%8CPriorityQueue/" class="title">NSQ代码阅读与分析之inFlightPqueue与inFlightPqueue</a></p>
+                            <p class="item-date"><time datetime="2019-04-20T00:00:00.000Z" itemprop="datePublished">2019-04-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-title"><a href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-TOPIC/" class="title">NSQ代码阅读与分析之TOPIC</a></p>
+                            <p class="item-date"><time datetime="2019-04-20T00:00:00.000Z" itemprop="datePublished">2019-04-20</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-title"><a href="/2019/04/15/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-Channel/" class="title">NSQ代码阅读与分析之Channel</a></p>
+                            <p class="item-date"><time datetime="2019-04-15T00:00:00.000Z" itemprop="datePublished">2019-04-15</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title"><span>tag cloud</span></h3>
+        <div class="widget">
+            <a href="/tags/Channel/" style="font-size: 10px;">Channel</a> <a href="/tags/arm/" style="font-size: 13.33px;">arm</a> <a href="/tags/cnn/" style="font-size: 10px;">cnn</a> <a href="/tags/flink/" style="font-size: 10px;">flink</a> <a href="/tags/go/" style="font-size: 10px;">go</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/hadoop/" style="font-size: 10px;">hadoop</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/lua/" style="font-size: 10px;">lua</a> <a href="/tags/lvs/" style="font-size: 10px;">lvs</a> <a href="/tags/mnist/" style="font-size: 10px;">mnist</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a> <a href="/tags/nsq/" style="font-size: 20px;">nsq</a> <a href="/tags/nsqlookup/" style="font-size: 10px;">nsqlookup</a> <a href="/tags/streaming/" style="font-size: 10px;">streaming</a> <a href="/tags/tcp6/" style="font-size: 10px;">tcp6</a> <a href="/tags/topic/" style="font-size: 10px;">topic</a> <a href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" style="font-size: 16.67px;">中间件</a> <a href="/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" style="font-size: 13.33px;">交叉编译</a> <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%BF%AB%E7%85%A7/" style="font-size: 10px;">分布式快照</a> <a href="/tags/%E5%BB%B6%E8%BF%9F%E6%8A%95%E9%80%92/" style="font-size: 10px;">延迟投递</a> <a href="/tags/%E6%B5%B7%E6%80%9D/" style="font-size: 13.33px;">海思</a> <a href="/tags/%E6%B6%88%E6%81%AF%E6%8A%95%E9%80%92/" style="font-size: 10px;">消息投递</a> <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" style="font-size: 20px;">消息队列</a> <a href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/" style="font-size: 10px;">装饰器模式</a>
+        </div>
+    </div>
+
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title"><span>archives</span></h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/07/">July 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap" id='categories'>
+        <h3 class="widget-title">
+            <span>categories</span>
+            &nbsp;
+            <a id='allExpand' href="#">
+                <i class="fa fa-angle-double-down fa-2x"></i>
+            </a>
+        </h3>
+        
+        
+        
+         <ul class="unstyled" id="tree" > 
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            flink
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2020/02/15/%E5%88%86%E5%B8%83%E5%BC%8F%E5%BF%AB%E7%85%A7%E7%AE%97%E6%B3%95%20Chandy-Lamport/">分布式快照算法 Chandy-Lamport</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            hadoop
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2019/04/01/2019-04-01-Hadoop%20Streaming%5B%E8%AF%91%5D/">Hadoop Streaming手册[译]</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            lua
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2018/12/28/2018-12-28-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%20lua%20for%20hisi-arm-linux/">交叉编译 lua for hisi-arm-linux</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            nginx
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2018/12/28/2018-12-31-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91nginx-1.14.2%20for%20hisi-arm-linux/">交叉编译nginx-1.14.2 for hisi-arm-linux</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory open">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder-open"></i>
+                            &nbsp;
+                            中间件
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file active"><a href="/2019/03/10/2019-03-10-NSQ%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-nsqlookupd%E7%BB%84%E4%BB%B6/">NSQ源码阅读-nsqlookupd组件</a></li>  <li class="file"><a href="/2019/04/14/2019-04-20-NSQ%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-%E5%BB%B6%E8%BF%9F%E6%B6%88%E6%81%AF/">NSQ延迟消息投递</a></li>  <li class="file"><a href="/2019/04/15/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-Channel/">NSQ代码阅读与分析之Channel</a></li>  <li class="file"><a href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-inFlightPqueue%E5%92%8CPriorityQueue/">NSQ代码阅读与分析之inFlightPqueue与inFlightPqueue</a></li>  <li class="file"><a href="/2019/04/20/2019-04-20-NSQ-%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB%E4%B8%8E%E5%88%86%E6%9E%90-TOPIC/">NSQ代码阅读与分析之TOPIC</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            后端开发
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2019/07/10/go-lvs-toa-ipv4/">LVS后端GO-Web获取用户IP</a></li>  </ul> 
+                    </li> 
+                    
+                    <li class="directory">
+                        <a href="#" data-role="directory">
+                            <i class="fa fa-folder"></i>
+                            &nbsp;
+                            深度学习
+                        </a>
+                         <ul class="unstyled" id="tree" >  <li class="file"><a href="/2017/07/05/%E5%9F%BA%E4%BA%8Ecnn%E8%BF%9B%E8%A1%8Cmnist%E6%89%8B%E5%86%99%E8%AF%86%E5%88%AB/">基于CNN的MNIST手写识别尝试</a></li>  </ul> 
+                    </li> 
+                     </ul> 
+    </div>
+    <script>
+        $(document).ready(function() {
+            var iconFolderOpenClass  = 'fa-folder-open';
+            var iconFolderCloseClass = 'fa-folder';
+            var iconAllExpandClass = 'fa-angle-double-down';
+            var iconAllPackClass = 'fa-angle-double-up';
+            // Handle directory-tree expansion:
+            // 左键单独展开目录
+            $(document).on('click', '#categories a[data-role="directory"]', function (event) {
+                event.preventDefault();
+
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var subtree = $(this).siblings('ul');
+                icon.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if (expanded) {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideUp({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderCloseClass);
+                } else {
+                    if (typeof subtree != 'undefined') {
+                        subtree.slideDown({ duration: 100 });
+                    }
+                    icon.addClass(iconFolderOpenClass);
+                }
+            });
+            // 右键展开下属所有目录
+            $('#categories a[data-role="directory"]').bind("contextmenu", function(event){
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconFolderOpenClass);
+                var listNode = $(this).siblings('ul');
+                var subtrees = $.merge(listNode.find('li ul'), listNode);
+                var icons = $.merge(listNode.find('.fa'), icon);
+                icons.removeClass(iconFolderOpenClass).removeClass(iconFolderCloseClass);
+                if(expanded) {
+                    subtrees.slideUp({ duration: 100 });
+                    icons.addClass(iconFolderCloseClass);
+                } else {
+                    subtrees.slideDown({ duration: 100 });
+                    icons.addClass(iconFolderOpenClass);
+                }
+            })
+            // 展开关闭所有目录按钮
+            $(document).on('click', '#allExpand', function (event) {
+                event.preventDefault();
+                
+                var icon = $(this).children('.fa');
+                var expanded = icon.hasClass(iconAllExpandClass);
+                icon.removeClass(iconAllExpandClass).removeClass(iconAllPackClass);
+                if(expanded) {
+                    $('#sidebar .fa.fa-folder').removeClass('fa-folder').addClass('fa-folder-open')
+                    $('#categories li ul').slideDown({ duration: 100 });
+                    icon.addClass(iconAllPackClass);
+                } else {
+                    $('#sidebar .fa.fa-folder-open').removeClass('fa-folder-open').addClass('fa-folder')
+                    $('#categories li ul').slideUp({ duration: 100 });
+                    icon.addClass(iconAllExpandClass);
+                }
+            });  
+        });
+    </script>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title"><span>tags</span></h3>
+        <div class="widget">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Channel/" rel="tag">Channel</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/arm/" rel="tag">arm</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/cnn/" rel="tag">cnn</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/flink/" rel="tag">flink</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/go/" rel="tag">go</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/" rel="tag">golang</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hadoop/" rel="tag">hadoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/" rel="tag">http</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lua/" rel="tag">lua</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lvs/" rel="tag">lvs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mnist/" rel="tag">mnist</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nsq/" rel="tag">nsq</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nsqlookup/" rel="tag">nsqlookup</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/streaming/" rel="tag">streaming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp6/" rel="tag">tcp6</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/topic/" rel="tag">topic</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%AD%E9%97%B4%E4%BB%B6/" rel="tag">中间件</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" rel="tag">交叉编译</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E5%BF%AB%E7%85%A7/" rel="tag">分布式快照</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%B6%E8%BF%9F%E6%8A%95%E9%80%92/" rel="tag">延迟投递</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%B7%E6%80%9D/" rel="tag">海思</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E6%81%AF%E6%8A%95%E9%80%92/" rel="tag">消息投递</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag">消息队列</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/" rel="tag">装饰器模式</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title"><span>links</span></h3>
+        <div class="widget">
+            <ul>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+            
+            <section id="main"><article id="post-2019-03-10-NSQ源码阅读-nsqlookupd组件" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+                    <div class="article-meta">
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/%E4%B8%AD%E9%97%B4%E4%BB%B6/">中间件</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/golang/" rel="tag">golang</a>, <a class="tag-link" href="/tags/http/" rel="tag">http</a>, <a class="tag-link" href="/tags/nsq/" rel="tag">nsq</a>, <a class="tag-link" href="/tags/nsqlookup/" rel="tag">nsqlookup</a>, <a class="tag-link" href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" rel="tag">消息队列</a>, <a class="tag-link" href="/tags/%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F/" rel="tag">装饰器模式</a>
+    </div>
+
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2019/03/10/2019-03-10-NSQ%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-nsqlookupd%E7%BB%84%E4%BB%B6/">
+            <time datetime="2019-03-10T00:00:00.000Z" itemprop="datePublished">2019-03-10</time>
+        </a>
+    </div>
+
+
+                        
+                            <i class="fa fa-bar-chart"></i>
+                            <span id="busuanzi_container_site_pv"><span id="busuanzi_value_page_pv"></span></span>    
+                        
+                        
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/raw/master/source/_posts/2019-03-10-NSQ源码阅读-nsqlookupd组件.md' target="_blank" rel="noopener"> Source </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/edit/master/source/_posts/2019-03-10-NSQ源码阅读-nsqlookupd组件.md' target="_blank" rel="noopener"> Edit </a>
+                            </div>
+                            <div class="article-meta-button">
+                                <a href='https://github.com/yindex/blog/commits/master/source/_posts/2019-03-10-NSQ源码阅读-nsqlookupd组件.md' target="_blank" rel="noopener"> History </a>
+                            </div>
+                        
+                    </div>
+                
+                
+    
+        <h1 class="article-title" itemprop="name">
+            NSQ源码阅读-nsqlookupd组件
+        </h1>
+    
+
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+        
+            
+        
+        
+            <!-- toc -->
+<blockquote>
+<p>NSQ包含三大组件nsqd、nsqlookup、nsqadmin. nsqlookupd 是守护进程负责管理拓扑信息,客户端通过查询 nsqlookupd 来发现指定topic的生产者，并且 nsqd 节点广播topic和channel信息.它包含两个接口：TCP 接口:处理nsqd广播。HTTP 接口:客户端用它来发现和管理服务。</p>
+</blockquote>
+<h2 id="一、NSQLookupd类型"><a href="#一、NSQLookupd类型" class="headerlink" title="一、NSQLookupd类型"></a>一、NSQLookupd类型</h2><p>nsqlookupd.go为nsqlookup组件的入口文件,它主要包含一个NSQLookupd结构类型和该类型的工厂方法func New(*Options)*NSQLookupd.</p>
+<p>NSQLookupd类型属性定义如下.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> NSQLookupd <span class="keyword">struct</span> &#123;</span><br><span class="line">	sync.RWMutex                      </span><br><span class="line">	opts         *Options             </span><br><span class="line">	tcpListener  net.Listener          </span><br><span class="line">	httpListener net.Listener          </span><br><span class="line">	waitGroup    util.WaitGroupWrapper </span><br><span class="line">	DB           *RegistrationDB</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>sync.RWMutex 读写锁，主要用来更新DB中的Registration，Topic, Channels.</li>
+<li>opts NSQLookup相关配置.</li>
+<li>tcpListener 用于nsqd与nsqlookupd通信，默认监听4160端口.</li>
+<li>httpListener 用于nsqlookupd与nsqadmin通信默认监听4161端口.</li>
+<li>waitGroup 装饰器模式，wrap了一层sync.WaitGroup，用于系统退出时同步tcpListener、httpListener结束.</li>
+<li>DB 存储当前注册的Registration， Topic， Chanel，用于nsqd的数据管理.</li>
+</ul>
+<p>NSQLookupd类型绑定的方法列表如下.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">- <span class="function"><span class="keyword">func</span> <span class="params">(n *NSQLookupd)</span> <span class="title">logf</span><span class="params">(level lg.LogLevel, f <span class="keyword">string</span>, args ...<span class="keyword">interface</span>&#123;&#125;)</span></span></span><br><span class="line">- <span class="function"><span class="keyword">func</span> <span class="title">Main</span><span class="params">()</span> <span class="title">error</span></span></span><br><span class="line">- <span class="function"><span class="keyword">func</span> <span class="title">RealTCPAddr</span><span class="params">()</span> *<span class="title">net</span>.<span class="title">TCPAddr</span></span></span><br><span class="line">- <span class="function"><span class="keyword">func</span> <span class="title">RealHTTPAddr</span><span class="params">()</span> *<span class="title">net</span>.<span class="title">TCPAddr</span></span></span><br><span class="line">- <span class="function"><span class="keyword">func</span> <span class="title">Exit</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><a href="https://github.com/zixks/nsq-analysis/blob/master/nsqlookupd/logger.go" target="_blank" rel="noopener">logf</a>方法 内部调用了internal日志方法,用于NSQLookupd上下文写日志.</li>
+<li>Main方法主要负责启动、停止,维护tcp http server等操作.</li>
+<li>RealTCPAddr, RealHTTPAddr获取当前服务地址.</li>
+<li>Exit() 同步关闭tcp http服务.</li>
+</ul>
+<h2 id="二、opts-成员"><a href="#二、opts-成员" class="headerlink" title="二、opts  成员"></a>二、opts  成员</h2><p>opts变量主要存储NSQLookup相关配置信息，类型定义如下:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Options <span class="keyword">struct</span> &#123;</span><br><span class="line">	LogLevel  <span class="keyword">string</span> <span class="string">`flag:"log-level"`</span></span><br><span class="line">	LogPrefix <span class="keyword">string</span> <span class="string">`flag:"log-prefix"`</span></span><br><span class="line">	Verbose   <span class="keyword">bool</span>   <span class="string">`flag:"verbose"`</span></span><br><span class="line">	Logger    Logger</span><br><span class="line">	logLevel  lg.LogLevel</span><br><span class="line">	TCPAddress       <span class="keyword">string</span> <span class="string">`flag:"tcp-address"`</span></span><br><span class="line">	HTTPAddress      <span class="keyword">string</span> <span class="string">`flag:"http-address"`</span></span><br><span class="line">	BroadcastAddress <span class="keyword">string</span> <span class="string">`flag:"broadcast-address"`</span></span><br><span class="line">	InactiveProducerTimeout time.Duration <span class="string">`flag:"inactive-producer-timeout"`</span> </span><br><span class="line">	TombstoneLifetime       time.Duration <span class="string">`flag:"tombstone-lifetime"`</span>        </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>LogLevel, LogPrefix定义了日志级别、日志前缀，Logger定义具体的日志类型，TCPAddress，HTTPAddress配置http，tcp相关服务监听地址.BroadcastAddress定义了广播地址.</li>
+<li>InactiveProducerTimeout 定义producer失活时间阈值，当超过InactiveProducerTimeout没有收到producer心跳时，则认为当前producer不在活跃.</li>
+<li><a href="https://github.com/mickey0524/nsq-analysis/blob/master/nsqlookupd/options.go#L23" target="_blank" rel="noopener">TombstoneLifetime</a>避免发生竞争，当一个nsqd不再产生一个特定的toipc, 需要去掉这个toipc，这个时候，试图尝试删除topic信息与新的消费者已经发现这个主题的节点，重连, 会更新nsqlookup产生竞争.</li>
+</ul>
+<h2 id="三、waitGroup-成员"><a href="#三、waitGroup-成员" class="headerlink" title="三、waitGroup 成员"></a>三、waitGroup 成员</h2><p>waitGroup成员是<a href="https://github.com/zixks/nsq-analysis/blob/master/internal/util/wait_group_wrapper.go" target="_blank" rel="noopener">util.WaitGroupWrapper</a>类型,内部组合了sync.WaitGroup类型并绑定Wrap装饰方.用以系统退出时同步关闭tcpServer和httpServer服务进行安全退出.</p>
+<p>在nslookupd.go的入口方法中，装箱tcpserver和httpserver服务<sup><a href="https://github.com/zixks/nsq-analysis/blob/master/nsqlookupd/nsqlookupd.go#L86" target="_blank" rel="noopener">nsqlookupd/nsqlookupd.go:64</a></sup>, 在nslookupd退出时调用Exit()方法<sup><a href="https://github.com/zixks/nsq-analysis/blob/master/nsqlookupd/nsqlookupd.go#L86" target="_blank" rel="noopener">nsqlookupd/nsqlookupd.go:87</a></sup>, 它会等待所有被wrap的方法都执行结束后（调用了wg.done后）进行安全退出.</p>
+<h2 id="四、httpListener成员"><a href="#四、httpListener成员" class="headerlink" title="四、httpListener成员"></a>四、httpListener成员</h2><p>httpListener成员类型定义在<a href="https://github.com/zixks/nsq-analysis/blob/master/nsqlookupd/http.go" target="_blank" rel="noopener">http.go</a>中， 该文件定义httpServer的同时定义了node变量和一个httpServer的工厂方法.httpServer类型包含一个Context上下文类型和一个路由请求处理handler(nsq使用了julienschmidt/httprouter路由，号称最快路由).</p>
+<p>httpServer提供的api接口如下列表，同时它在注册路由时也使用了装饰器http_api.Decorate,装饰了log，http_api等. 同时httpServer提供了大量的DEBUG接口用于系统调试.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">router.Handle(<span class="string">"GET"</span>, <span class="string">"/ping"</span>, http_api.Decorate(s.pingHandler, log, http_api.PlainText))</span><br><span class="line">router.Handle(<span class="string">"GET"</span>, <span class="string">"/info"</span>, http_api.Decorate(s.doInfo, log, http_api.V1))</span><br><span class="line">router.Handle(<span class="string">"GET"</span>, <span class="string">"/debug"</span>, http_api.Decorate(s.doDebug, log, http_api.V1))</span><br><span class="line">router.Handle(<span class="string">"GET"</span>, <span class="string">"/lookup"</span>, http_api.Decorate(s.doLookup, log, http_api.V1))</span><br><span class="line">router.Handle(<span class="string">"GET"</span>, <span class="string">"/topics"</span>, http_api.Decorate(s.doTopics, log, http_api.V1))</span><br><span class="line">router.Handle(<span class="string">"GET"</span>, <span class="string">"/channels"</span>, http_api.Decorate(s.doChannels, log, http_api.V1))</span><br><span class="line">router.Handle(<span class="string">"GET"</span>, <span class="string">"/nodes"</span>, http_api.Decorate(s.doNodes, log, http_api.V1))</span><br><span class="line">router.Handle(<span class="string">"POST"</span>, <span class="string">"/topic/create"</span>, http_api.Decorate(s.doCreateTopic, log, http_api.V1))</span><br><span class="line">router.Handle(<span class="string">"POST"</span>, <span class="string">"/topic/delete"</span>, http_api.Decorate(s.doDeleteTopic, log, http_api.V1))</span><br><span class="line">router.Handle(<span class="string">"POST"</span>, <span class="string">"/channel/create"</span>, http_api.Decorate(s.doCreateChannel, log, http_api.V1))</span><br><span class="line">router.Handle(<span class="string">"POST"</span>, <span class="string">"/channel/delete"</span>, http_api.Decorate(s.doDeleteChannel, log, http_api.V1))</span><br><span class="line">router.Handle(<span class="string">"POST"</span>, <span class="string">"/topic/tombstone"</span>, http_api.Decorate(s.doTombstoneTopicProducer, log, http_api.V1))</span><br><span class="line">router.HandlerFunc(<span class="string">"GET"</span>, <span class="string">"/debug/pprof"</span>, pprof.Index)</span><br><span class="line">router.HandlerFunc(<span class="string">"GET"</span>, <span class="string">"/debug/pprof/cmdline"</span>, pprof.Cmdline)</span><br><span class="line">router.HandlerFunc(<span class="string">"GET"</span>, <span class="string">"/debug/pprof/symbol"</span>, pprof.Symbol)</span><br><span class="line">router.HandlerFunc(<span class="string">"POST"</span>, <span class="string">"/debug/pprof/symbol"</span>, pprof.Symbol)</span><br><span class="line">router.HandlerFunc(<span class="string">"GET"</span>, <span class="string">"/debug/pprof/profile"</span>, pprof.Profile)</span><br><span class="line">router.Handler(<span class="string">"GET"</span>, <span class="string">"/debug/pprof/heap"</span>, pprof.Handler(<span class="string">"heap"</span>))</span><br><span class="line">router.Handler(<span class="string">"GET"</span>, <span class="string">"/debug/pprof/goroutine"</span>, pprof.Handler(<span class="string">"goroutine"</span>))</span><br><span class="line">router.Handler(<span class="string">"GET"</span>, <span class="string">"/debug/pprof/block"</span>, pprof.Handler(<span class="string">"block"</span>))</span><br><span class="line">router.Handler(<span class="string">"GET"</span>, <span class="string">"/debug/pprof/threadcreate"</span>, pprof.Handler(<span class="string">"threadcreate"</span>))</span><br></pre></td></tr></table></figure>
+
+<p>API接口比较多，功能也都顾名思义比较直接.这儿重点记录几个典型接口实现.</p>
+<h3 id="func-s-httpServer-doCreateTopic"><a href="#func-s-httpServer-doCreateTopic" class="headerlink" title="func(s *httpServer) doCreateTopic"></a>func(s *httpServer) doCreateTopic</h3><p>创建topic接口; 内部实现主要包含了topic参数获取，topic检测，日志记录以及最重要的topic检测. Topic合法检测主要检测了起长度限(internal/protocol/names.go:22)制和一个正则检验(internal/protocol/names.go:8). </p>
+<p>Topic创建通过nsqlookupd的db成员中的AddRegistration方法实现,AddRegistration在实现注册时使用读写锁进行并发资源保护. 代码实现如下:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(r *RegistrationDB)</span> <span class="title">AddRegistration</span><span class="params">(k Registration)</span></span> &#123;</span><br><span class="line">	r.Lock()</span><br><span class="line">	<span class="keyword">defer</span> r.Unlock()</span><br><span class="line">	_, ok := r.registrationMap[k]</span><br><span class="line">	<span class="keyword">if</span> !ok &#123;</span><br><span class="line">		r.registrationMap[k] = <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]*Producer)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="func-s-httpServer-doLookup"><a href="#func-s-httpServer-doLookup" class="headerlink" title="func (s *httpServer) doLookup"></a>func (s *httpServer) doLookup</h3><p>查询指定Topic的nsqd节点接口(nsqlookupd/http.go:105)，函数内部主要调用了DB变量绑定的方法，从而实现查询功能.</p>
+<p>httpServer提供的api接口方法主要在做与用户交互的一些功能，关于数据的管理都有后端db来提供实现.这也体现了mvc的思路吧算是.</p>
+<h2 id="五、tcpListener-成员"><a href="#五、tcpListener-成员" class="headerlink" title="五、tcpListener 成员"></a>五、tcpListener 成员</h2><p>tcpServer类型定义在tcp.go(nsqlookupd/tcp.go:10)中，函数内部包含一个NSQLookupd的Context变量，以及一个处理请求的方法<code>func Handle(net.Conn)</code>.</p>
+<p>Handle方法主要完成两个操作.</p>
+<h3 id="客户端版本号识别"><a href="#客户端版本号识别" class="headerlink" title="客户端版本号识别"></a>客户端版本号识别</h3><p>调用io.ReadFull读取客户端请求中的版本号，根据该函数描述<code>ReadFull reads exactly len(buf) bytes from r into buf.</code> ，精确读取客户端请求前4字节数据作为客户端版本号. <a href="https://github.com/zixks/nsq-analysis" target="_blank" rel="noopener">当前代码</a>版本仅支持版本号为V1的客户端, 若客户端合法则创建LookupProtocolV1类型并由该类型负责处理消息循环.其他版本则返回<code>E_BAD_PROTOCOL</code></p>
+<h3 id="IOLoop消息循环"><a href="#IOLoop消息循环" class="headerlink" title="IOLoop消息循环"></a><a href="nsqlookupd/lookup_protocol_v1.go:20">IOLoop消息循环</a></h3><p>服务端首先对客户端请求进行预处理，以换行符号‘\n’ 作为请求间的切分标志，并且针对每次请求以空格“ ”分割请求内容作为参数列表. 将请求参数列表和链接对象传给LookupProtocolV1.exec()处理. 根据客户端(nsqd)请求内容的第一个参数，确定请求功能类型.</p>
+<p>IOLoop通过Exec支持四种操作: PING, IDENTIFY, REGISTER UNREGISTER.</p>
+<ul>
+<li><p>PING 心跳包，nsqd存活检测, 并更新nsqd lastUpdate(原子操作)</p>
+</li>
+<li><p>IDENTIFY 主要负责nsqd 连接tcpServer时候发送的注册包，根据nsqd发送的body内容实例化一个PeerInfo用来存储nsqd的meta信息，并讲PeerInfo存储到producer map中.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">peerInfo := PeerInfo&#123;id: client.RemoteAddr().String()&#125;</span><br><span class="line">err = json.Unmarshal(body, &amp;peerInfo)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span>, protocol.NewFatalClientErr(err, <span class="string">"E_BAD_BODY"</span>, <span class="string">"IDENTIFY failed to decode JSON body"</span>)</span><br><span class="line">&#125;</span><br><span class="line">peerInfo.RemoteAddress = client.RemoteAddr().String()</span><br><span class="line">...</span><br><span class="line">atomic.StoreInt64(&amp;peerInfo.lastUpdate, time.Now().UnixNano())</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>REGISTER 获取topic channel构造Registration，存储到DB中</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> p.ctx.nsqlookupd.DB.AddProducer(key, &amp;Producer&#123;peerInfo: client.peerInfo&#125;)&#123;</span><br><span class="line">	p.ctx.nsqlookupd.logf(LOG_INFO, <span class="string">"DB: client(%s) REGISTER category:%s key:%s subkey:%s"</span>,client, <span class="string">"channel"</span>, topic, channel)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> p.ctx.nsqlookupd.DB.AddProducer(key, &amp;Producer&#123;peerInfo: client.peerInfo&#125;)&#123;</span><br><span class="line">	p.ctx.nsqlookupd.logf(LOG_INFO, <span class="string">"DB: client(%s) REGISTER category:%s key:%s subkey:%s"</span>,client, <span class="string">"topic"</span>, topic, <span class="string">""</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>UNREGISTER 顾名思义为REGISTER逆操作.</p>
+</li>
+</ul>
+<h2 id="六、DB成员"><a href="#六、DB成员" class="headerlink" title="六、DB成员"></a>六、DB成员</h2><p>DB成员类型定义在nsqlookupd/registration_db.go，该文件中定义以下7中类型，该文件内实现了nsqlookupd的核心业务模型逻辑，tcpServer和httpServer中对外提供的接口都是由该部分提供具体实现.应该算是模型层吧.<br>该部分提供底层操作逻辑供tcpserver&amp;httpserver调用，因此阅读类型结构后根据tcpserver&amp;httpserver作为线索理清楚DB绑定方法.</p>
+<h3 id="DB成员类型依赖关系图"><a href="#DB成员类型依赖关系图" class="headerlink" title="DB成员类型依赖关系图"></a>DB成员类型依赖关系图</h3><img src="/img/nslookupd_type.png"/>
+
+<h3 id="DB成员提供的服务"><a href="#DB成员提供的服务" class="headerlink" title="DB成员提供的服务"></a>DB成员提供的服务</h3><h4 id="创建Topic"><a href="#创建Topic" class="headerlink" title="创建Topic"></a>创建Topic</h4><p>在RegistrationDB中添加一个Registration key和默认的ProducerMap 并返回false.若已经存在则返回true</p>
+<h4 id="删除Topic"><a href="#删除Topic" class="headerlink" title="删除Topic"></a>删除Topic</h4><p>先根据当前topic检索出该topic上绑定的channels，并删除所有的相关channel（channel也存储在registrationMap中）然后删除该topic相关信息(Producer， PeerInfo…)<br>ps: channel 和 topic都存储在registrationMap中，由key:Registration{Category, Key, SubKey}来区分存储的数据类别.</p>
+<h4 id="屏蔽Topic"><a href="#屏蔽Topic" class="headerlink" title="屏蔽Topic"></a>屏蔽Topic</h4><p><a href="https://github.com/nsqio/nsq/blob/master/nsqlookupd/http.go#L178" target="_blank" rel="noopener">nsqlookupd/http.go:doTombstoneTopicProducer</a>, 屏蔽制定node的一个topic. 在http请求中获取要屏蔽的node和topic,并根据topicName检索出相应的Producer，<a href="https://github.com/nsqio/nsq/blob/master/nsqlookupd/http.go#L198" target="_blank" rel="noopener">根据请求中的node屏蔽Producer中对应的producer</a>. </p>
+<p>虽然go是值传递，for循环时是临时对象，但是根据<code>Producers</code>类型定义可以知道该类型中存储的是指针类型，所以再执行<code>p.Tombstone()</code>时是在具体地址上执行.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Producers []*Producer</span><br></pre></td></tr></table></figure>
+
+<h4 id="创建Channel"><a href="#创建Channel" class="headerlink" title="创建Channel"></a>创建Channel</h4><p>创建channel步骤与创建topic相同,都是调用AddRegistration，只是在创建channel后调用了一次创建该channel的topic（<a href="https://github.com/nsqio/nsq/blob/master/nsqlookupd/registration_db.go#L76" target="_blank" rel="noopener">不会重复创建</a>）</p>
+<h4 id="删除Channel"><a href="#删除Channel" class="headerlink" title="删除Channel"></a>删除Channel</h4><p>Channel删除比较直接，根据请求中的Channel值，检索出相关Registration然后删除.</p>
+<h4 id="Lookup功能"><a href="#Lookup功能" class="headerlink" title="Lookup功能"></a>Lookup功能</h4><p>根据传入的topic值，检索判断是否存在对应的Registration.检索出相应的producer&amp;channels并返回.</p>
+<h4 id="nsqd连接nsqlookupd-IDENTIFY"><a href="#nsqd连接nsqlookupd-IDENTIFY" class="headerlink" title="nsqd连接nsqlookupd [IDENTIFY]"></a>nsqd连接nsqlookupd <a href="https://github.com/nsqio/nsq/blob/master/nsqlookupd/lookup_protocol_v1.go#L194" target="_blank" rel="noopener">[IDENTIFY]</a></h4><ul>
+<li>解析出请求中peerInfo</li>
+<li>原子操作更新peerInfo.lastUpdate</li>
+<li>注册到Producer</li>
+</ul>
+<p>……</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://github.com/mickey0524/nsq-analysis" target="_blank" rel="noopener">[1]nsq源码阅读</a></li>
+<li><a href="https://github.com/zixks/golang-design-pattern/tree/master/00_simple_factory" target="_blank" rel="noopener">[2]go简单工厂模式</a></li>
+<li><a href="https://zh.wikipedia.org/zh-hans/%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95#%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82" target="_blank" rel="noopener">[3]工厂方法:维基百科</a></li>
+<li><a href="https://github.com/zixks/golang-design-pattern/tree/master/20_decorator" target="_blank" rel="noopener">[4]golang 装饰模式</a> </li>
+<li><a href="https://en.wikipedia.org/wiki/Decorator_pattern" target="_blank" rel="noopener">[5]Decorator pattern</a>    </li>
+</ul>
+
+            </div>
+        
+        <footer class="article-footer">
+        </footer>
+    </div>
+</article>
+
+
+    
+<nav id="article-nav">
+    
+        <a href="/2019/04/01/2019-04-01-Hadoop%20Streaming%5B%E8%AF%91%5D/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    Hadoop Streaming手册[译]
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/12/28/2018-12-31-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91nginx-1.14.2%20for%20hisi-arm-linux/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">交叉编译nginx-1.14.2 for hisi-arm-linux</div>
+        </a>
+    
+</nav>
+
+
+
+
+
+    
+    
+
+
+
+
+<!-- baidu url auto push script -->
+<script type="text/javascript">
+    !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=window.location.href,o=document.referrer;if(!e.test(r)){var n="//api.share.baidu.com/s.gif";o?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var t=new Image;t.src=n}}(window);
+</script>     
+</section>
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            yindex &copy; 2020 
+            <a rel="license noopener" href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/80x15.png" /></a>
+            <br> Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme - <a href="https://github.com/zthxxx/hexo-theme-Wikitten" target="_blank" rel="noopener">wikitten</a>
+            
+                <br>
+                <span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i> <span id="busuanzi_value_site_pv"></span></span>
+                &nbsp;|&nbsp;
+                <span id="busuanzi_container_site_pv"><i class="fa fa-user"></i> <span id="busuanzi_value_site_uv"></span></span>
+            
+        </div>
+    </div>
+</footer>
+
+        
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+        <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true,
+            TeX: {
+                equationNumbers: {
+                  autoNumber: 'AMS'
+                }
+            }
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script async src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+    </div>
+</body>
+</html>
