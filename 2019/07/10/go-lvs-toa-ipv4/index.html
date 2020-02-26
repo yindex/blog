@@ -17,7 +17,7 @@
 <meta property="og:description" content="0x01. 问题最近写了个对外的ti接口,测试时发现获取到的用户ip都是lvs的ip. 咨询hulk同事LVS是FULLNAT模式,宿主机器需要安装toa.然而安装完toa后依旧没有解决问题.z在宿主机器上查看go-web监听和链接情况: 1netstat -pant | grep ti 发现go gin框架默认以tcp6监听服务，通过查询资料得知toa仅支持tcp4, 那么就需要修改下源代码让服">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2019-07-10T16:12:31.000Z">
-<meta property="article:modified_time" content="2020-02-26T12:31:13.064Z">
+<meta property="article:modified_time" content="2020-02-26T13:03:41.717Z">
 <meta property="article:author" content="yindex">
 <meta property="article:tag" content="go">
 <meta property="article:tag" content="lvs">
