@@ -5,8 +5,6 @@ categories: flink
 tags: [分布式快照, flink]
 ---
 
-[toc]
-
 # Introduction
 
 A snapshot algorithm is used to create a consistent snapshot of the global state of a distributed system. Due to the lack of globally shared memory and a global clock, the isn't trivially possible.
