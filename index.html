@@ -456,10 +456,33 @@
                     
                     
                 
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                    
+                    
+                
+                
+                    
+                    <p><p>[toc]</p>
+<h1 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h1><p>A snapshot algorithm is used to create a consistent snapshot of the global state of a distributed system. Due to the lack of globally shared memory and a global clock, the isn’t trivially possible.</p>
+<h1 id="1-Overview"><a href="#1-Overview" class="headerlink" title="1. Overview"></a>1. Overview</h1><p>Chandy-Lamport algorithm is named by two author’s name. One of them, Lamport, the author of Paxos.</p>
+<blockquote>
+<p>The distributed snapshot algorithm described here came about when I  visited Chandy, who was then at the University of Texas in Austin. He  posed the problem to me over dinner, but we had both had too much wine  to think about it right then. The next morning, in the shower, I came up with the solution. When I arrived at Chandy’s office, he was waiting  for me with the same solution. I consider the algorithm to be a  straightforward application of the basic ideas from Time, Clocks and the Ordering of Events in a Distributed System. </p>
+<p>
+                
             
         
         
-            
+            </div>   
+            <div class="article-more-link">
+                <a href="/2020/02/15/%E5%88%86%E5%B8%83%E5%BC%8F%E5%BF%AB%E7%85%A7%E7%AE%97%E6%B3%95%20Chandy-Lamport/#more">Read More</a>
             </div>
         
         <footer class="article-footer">
@@ -551,10 +574,10 @@
                 
                 
                     
-                    <p><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>最近写了个对外的ti接口,测试时发现获取到的用户ip都是lvs的ip. 咨询hulk同事LVS是FULLNAT模式,宿主机器需要安装toa.然而安装完toa后依旧没有解决问题.z在宿主机器上查看go-web监听和链接情况:</p>
+                    <p><h2 id="0x01-问题"><a href="#0x01-问题" class="headerlink" title="0x01. 问题"></a>0x01. 问题</h2><p>最近写了个对外的ti接口,测试时发现获取到的用户ip都是lvs的ip. 咨询hulk同事LVS是FULLNAT模式,宿主机器需要安装toa.然而安装完toa后依旧没有解决问题.z在宿主机器上查看go-web监听和链接情况:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -pant | grep ti</span><br></pre></td></tr></table></figure>
 <p>发现go gin框架默认以tcp6监听服务，通过查询资料得知toa仅支持tcp4, 那么就需要修改下源代码让服务监听tcp4.</p>
-<h2 id="查看gin源码"><a href="#查看gin源码" class="headerlink" title="查看gin源码"></a>查看gin源码</h2><p>想看看gin是如何进行tcp监听的，查看gin.go代码289行发现，gin框架是使用go原生http.ListenAndServe启动的web服务.</p>
+<h2 id="0x02-查看gin源码"><a href="#0x02-查看gin源码" class="headerlink" title="0x02. 查看gin源码"></a>0x02. 查看gin源码</h2><p>想看看gin是如何进行tcp监听的，查看gin.go代码289行发现，gin框架是使用go原生http.ListenAndServe启动的web服务.</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(engine *Engine)</span> <span class="title">Run</span><span class="params">(addr ...<span class="keyword">string</span>)</span> <span class="params">(err error)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123; debugPrintError(err) &#125;()</span><br><span class="line"></span><br><span class="line">	address := resolveAddress(addr)</span><br><span class="line">	debugPrint(<span class="string">"Listening and serving HTTP on %s\n"</span>, address)</span><br><span class="line">	err = http.ListenAndServe(address, engine)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>
                 
