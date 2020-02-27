@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     
-    <title>NSQ源码阅读-nsqlookupd组件 | 数据安全技术研究</title>
+    <title>NSQ源码阅读-nsqlookupd组件 | 数据与安全技术研究</title>
     
     
         <meta name="keywords" content="golang,nsq,消息队列,nsqlookup,http,装饰器模式" />
@@ -13,12 +13,12 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="NSQ源码阅读-nsqlookupd组件">
 <meta property="og:url" content="https://blog.yindex.org/2019/03/10/2019-03-10-NSQ%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB-nsqlookupd%E7%BB%84%E4%BB%B6/index.html">
-<meta property="og:site_name" content="数据安全技术研究">
+<meta property="og:site_name" content="数据与安全技术研究">
 <meta property="og:description" content="NSQ包含三大组件nsqd、nsqlookup、nsqadmin. nsqlookupd 是守护进程负责管理拓扑信息,客户端通过查询 nsqlookupd 来发现指定topic的生产者，并且 nsqd 节点广播topic和channel信息.它包含两个接口：TCP 接口:处理nsqd广播。HTTP 接口:客户端用它来发现和管理服务。  一、NSQLookupd类型nsqlookupd.go为n">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://blog.yindex.org/img/nslookupd_type.png">
 <meta property="article:published_time" content="2019-03-10T00:00:00.000Z">
-<meta property="article:modified_time" content="2020-02-26T13:03:41.717Z">
+<meta property="article:modified_time" content="2020-02-27T17:17:23.651Z">
 <meta property="article:author" content="yindex">
 <meta property="article:tag" content="golang">
 <meta property="article:tag" content="nsq">
@@ -31,7 +31,7 @@
     
 
     
-        <link rel="alternate" href="/atom.xml" title="数据安全技术研究" type="application/atom+xml" />
+        <link rel="alternate" href="/atom.xml" title="数据与安全技术研究" type="application/atom+xml" />
     
 
     
@@ -85,7 +85,7 @@
         <div class="outer">
             <a href="/" id="logo">
                 <i class="logo"></i>
-                <span class="site-title">数据安全技术研究</span>
+                <span class="site-title">数据与安全技术研究</span>
             </a>
             <nav id="main-nav">
                 
